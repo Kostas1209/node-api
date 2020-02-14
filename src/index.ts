@@ -5,7 +5,10 @@ import './db';
 
 
 const app = express();
-
+app.use((request , response, next)=>{
+  console.log(request.url +' ' + request.method + ' ');
+  next();
+})
 
 app.listen(config.port, err => {
     if (err) {

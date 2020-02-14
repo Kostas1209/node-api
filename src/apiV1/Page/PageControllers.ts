@@ -8,9 +8,8 @@ export default class {
             {
                 req.params.pageId = "1";
             }
-            console.log(req.params.pageId);
             const pageNumber : number = <number> <unknown>req.params.pageId;
-            const threeBooks = await Book.find( {}, { comments: { $slice: [(pageNumber-1)*3, 3] } } )
+            const threeBooks = await Book.find( {} ).skip((pageNumber-1)*3).limit(3); 
             if(!threeBooks || threeBooks.length === 0 ){
                 return resp.status(404).send({
                     success: false,
@@ -38,10 +37,17 @@ export default class {
 
     public postBook = async(req: Request, resp: Response ): Promise<any> =>{
         try{
-            console.log(JSON.stringify(req.body));
+            const book = new Book({
+                title : req.body.title,
+                author: req.body.author,
+                price: req.body.price,
+                amount_in_storage: req.body.amount_in_storage
+            })
+            await book.save();
+
             return resp.status(200).send({
                 success: true,
-                data: "Save"
+                data: "Save Book"
             })
         }
         catch(error)
