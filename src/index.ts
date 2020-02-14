@@ -2,9 +2,13 @@ import * as express from 'express';
 import config from '../config';
 import apiV1 from './apiV1';
 import './db';
+import * as bcrypt from 'bcrypt';
 
+///  generate salt for crypting pasword 
+export const SALT = bcrypt.genSaltSync(config.salt_bcrypt);
 
 const app = express();
+
 app.use((request , response, next)=>{
   console.log(request.url +' ' + request.method + ' ');
   next();
