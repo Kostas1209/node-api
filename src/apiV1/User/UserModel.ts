@@ -1,6 +1,7 @@
 import * as mongoose from "mongoose";
 import * as bcrypt from 'bcrypt';
 import { SALT } from '../../index';
+import * as validator from 'validator';
 
 const Schema = mongoose.Schema;
 
@@ -18,7 +19,12 @@ const UserSchema = Schema(
         email: {
             type: String,
             requered: true,
-            unique: 'this email has already existed'
+            unique: 'this email has already existed',
+            validate: (value) => {
+                if(!validator.isEmail(value)){
+                    throw new Error('Invalid Email')
+                }
+            }
         },
         first_name: {
             type: String,
@@ -28,14 +34,13 @@ const UserSchema = Schema(
             type: String,
             requered: false
         }
-
-    }
+    }   
 )
 
-UserSchema.methods.IsPasswordValid = function(password: string)
+UserSchema.methods.isPasswordValid = function(password: string) : boolean
 {
-    let crypt : string = bcrypt.hashSync(password, SALT);
-    return crypt === this.password;
-}
+    let compare = bcrypt.compare(password, this.password);
+    return compare;
+};
 
 export default mongoose.model("User", UserSchema);

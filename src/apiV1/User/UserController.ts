@@ -1,7 +1,11 @@
-import { Request, Response, } from 'express';
+import { Request, Response, response, } from 'express';
 import User from './UserModel';
 import * as bcrypt from 'bcrypt';
 import { SALT } from '../../index';
+import config from '../../../config';
+import * as jwt from 'jwt-then';
+import { IUser } from '../types/User';
+import {ITokenPayload} from '../types/TokenPayload';
 
 
 export default class{
@@ -61,6 +65,56 @@ export default class{
             });
         }
         catch(error){
+            resp.status(500).send(
+                {
+                    success: false,
+                    message: error.toString(),
+                    data: null
+                }
+            )
+        }
+    }
+
+    public Login = async(req:Request, resp: Response): Promise<any>  => {
+        try{
+            let credentials={
+                email: req.body.email,
+                password: req.body.password
+            };
+            console.log(credentials)
+            let user : IUser = await User.findOne({email: credentials.email},(error,result)=>{
+                if(error)
+                {
+                    return resp.status(404).send({
+                        success: false,
+                        message: "Email or password is wrong"
+                    })
+                }
+            });
+            if(!user.isPasswordValid(credentials.password))
+            {
+                return response.status(400).send({
+                    success: false,
+                    message: "Email or password is wrong"
+                })
+            }
+            let payload : ITokenPayload = {
+                user_id : user._id
+            }
+            let accessToken = await jwt.sign(payload, config.jwt_access_secret,{expiresIn : config.jwt_access_expire});
+            let refreshToken = await jwt.sign(payload, config.jwt_refresh_secret,{expiresIn : config.jwt_refresh_expire} );
+
+
+            return resp.status(200).send({
+                success: true,
+                data: {
+                    access: accessToken,
+                    refresh: refreshToken
+                }
+            })
+        }
+        catch(error)
+        {
             resp.status(500).send(
                 {
                     success: false,
