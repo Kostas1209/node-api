@@ -24,13 +24,11 @@ const UserSchema = Schema(
                 }
             }
         },
-        first_name: {
+        firstName: {
             type: String,
-            requered: false
         },
-        last_name: {
+        lastName: {
             type: String,
-            requered: false
         },
         avatar:{
             type: String,
