@@ -10,10 +10,13 @@ export const SALT = bcrypt.genSaltSync(config.salt_bcrypt);
 
 const app = express();
 
+/// middleware for logging requests
 app.use((request , response, next)=>{
   console.log(request.url +' ' + request.method + ' ');
   next();
 })
+
+app.use('/api', apiV2 );
 
 app.listen(config.port, err => {
     if (err) {
@@ -23,5 +26,5 @@ app.listen(config.port, err => {
     console.log(`Server is listening on ${config.host}:${config.port}`);
   });
 
-app.use('/api', apiV2 );
+
 //app.use('/apiV1', apiV1);

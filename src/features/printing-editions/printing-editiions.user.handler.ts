@@ -1,5 +1,5 @@
 import { Request, Response, } from 'express';
-import { GetBookOnPageService, AddBooksService, GetSortedListService } from './printing-editions.service';
+import { GetBookOnPageService, AddBooksService, GetSortedListService, SearchBooksService } from './printing-editions.service';
 import { Book } from '../shared/types/Printing-edition.types';
 
 export async function GetBooksOnPageHandler(req: Request, resp: Response ): Promise<any>
@@ -81,4 +81,28 @@ export async function SortBookHandler(req: Request, resp: Response): Promise<any
    }
         
 
+}
+
+export async function SearchBookHandle(req: Request, resp: Response): Promise<any>
+{
+    /*
+    *   request must containe 'needle'
+    */
+
+    try{
+        let stringForSearch: string = req.body.needle
+        let books: Book[] = await SearchBooksService(stringForSearch);
+        return resp.status(200).send({
+            success: true,
+            data: books
+        })
+    }
+    catch(error)
+    {
+        return resp.status(500).send({
+            success: false,
+            data : null,
+            message: error.toString()
+        })
+    }
 }

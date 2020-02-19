@@ -29,3 +29,9 @@ export async function GetAllBooks()
     }
     return getBooks;
 }
+
+export async function SearchBookByPattern(pattern : string)
+{
+    let books : Book[] = await BookModel.find({"title" : {'$regex': `${pattern}`,"$options": ["m","i"]}});
+    return books;
+}

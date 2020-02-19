@@ -1,4 +1,4 @@
-import { GetBooksOnPage, AddBook, GetAllBooks } from "./printing-editions.repository";
+import { GetBooksOnPage, AddBook, GetAllBooks, SearchBookByPattern } from "./printing-editions.repository";
 import { Book } from "../shared/types/Printing-edition.types";
 import { ModesForSortingBooks } from "../shared/enums";
 
@@ -77,4 +77,11 @@ export async function GetSortedListService(mode :string) : Promise<Book[]>
     books = books.sort(comparator);
 
     return Promise.resolve(books)
+}
+
+export async function SearchBooksService(stringForSearch : string): Promise<Book[]>
+{
+    let books: Book[] = await SearchBookByPattern(stringForSearch);
+    /// change maybe
+    return books
 }
