@@ -20,3 +20,12 @@ export async function AddBook(book : Book)
                       authorIds: book.authorIds
                     })
 }
+
+export async function GetAllBooks()
+{
+    let getBooks = await BookModel.find()
+    if(!getBooks || getBooks.length === 0 ){
+        throw new Error("Book catalog is empty");
+    }
+    return getBooks;
+}

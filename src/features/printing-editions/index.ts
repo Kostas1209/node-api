@@ -1,11 +1,17 @@
 import { Router } from "express";
 import user from "../../apiV1/User/UserRoutes";
-import { GetBooksOnPageHandler, AddBooksHandler } from "./printing-editiions.user.handler";
+import { GetBooksOnPageHandler, AddBooksHandler, SortBookHandler } from "./printing-editiions.user.handler";
 
 export const userRoutes : Router = Router();
 
+
+userRoutes.get("/sort", SortBookHandler);
 userRoutes.get("/:page",GetBooksOnPageHandler);
+
+
 userRoutes.post("/", AddBooksHandler);
+
+
 
 
 

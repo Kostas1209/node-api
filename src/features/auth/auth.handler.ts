@@ -38,6 +38,10 @@ export async function RegistrUserHandler(req: Request, resp: Response): Promise<
 
 export async function LoginUserHandler(req: Request, resp: Response): Promise<any>
 {
+    /*
+    *    request must contain 'email' and 'password'
+    */
+
     try{
         let credentials: UserCredentials ={
             email : req.body.email,

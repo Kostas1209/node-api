@@ -1,5 +1,5 @@
 import { Request, Response, } from 'express';
-import { GetBookOnPageService, AddBooksService } from './printing-editions.service';
+import { GetBookOnPageService, AddBooksService, GetSortedListService } from './printing-editions.service';
 import { Book } from '../shared/types/Printing-edition.types';
 
 export async function GetBooksOnPageHandler(req: Request, resp: Response ): Promise<any>
@@ -53,4 +53,32 @@ export async function AddBooksHandler(req: Request, resp: Response): Promise<any
             message: error.toString()
         })
     }
+}
+
+export async function SortBookHandler(req: Request, resp: Response): Promise<any>
+{
+    /*
+    *  Request must containe column sorting by
+    */
+
+   try
+   {
+       let mode: string = req.body.mode;
+       let books : Book[] = await GetSortedListService(mode);
+
+       return resp.status(200).send({
+           success: true,
+           data: books
+       })
+   }
+   catch(error)
+   {
+       return resp.status(500).send({
+           success: false,
+           data : null,
+           message: error.toString()
+       })
+   }
+        
+
 }
