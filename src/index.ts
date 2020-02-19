@@ -1,6 +1,7 @@
 import * as express from 'express';
 import config from '../config';
-import apiV1 from './apiV1';
+//import apiV1 from './apiV1';
+import apiV2 from './features';
 import './db';
 import * as bcrypt from 'bcrypt';
 
@@ -22,4 +23,5 @@ app.listen(config.port, err => {
     console.log(`Server is listening on ${config.host}:${config.port}`);
   });
 
-app.use('/apiV1', apiV1)
+app.use('/api', apiV2 );
+//app.use('/apiV1', apiV1);

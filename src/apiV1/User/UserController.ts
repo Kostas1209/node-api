@@ -124,4 +124,65 @@ export default class{
             )
         }
     }
+
+    public ChangeUserInfo = async(req: Request, resp: Response) => {
+        /*
+        *
+        *    require   email OR first_name  OR last_name  OR  username  
+        */
+        try{
+            const token : string  = req.headers.authorization.replace("Bearer ",""); 
+            const decode : ITokenPayload = <ITokenPayload>await jwt.verify(token, config.jwt_access_secret);
+            console.log(decode);
+            
+            if(!user)
+            {
+                return resp.status(404).send({
+                    success: false,
+                    message: "User not found",
+                    data: null
+                })
+            }
+            console.log(req.body);
+            if(req.body.email)
+            {
+                user.email = req.body.email;
+            }
+            if(req.body.first_name)
+            {
+                user.first_name = req.body.first_name;
+            }
+            if(req.body.last_name)
+            {
+                user.last_name = req.body.last_name;
+            }
+            if(req.body.username)
+            {
+                user.username = req.body.username;
+            }
+
+            user.save((error,success)=>{
+                if(error){
+                    return resp.send({
+                        success: false,
+                        data: error.errmsg
+                    });
+                } 
+                console.log(success);
+                return resp.status(200).send({
+                    success: true,
+                    data: "User was changed"
+                })
+            });
+        }
+        catch(error){
+            resp.status(500).send(
+                {
+                    success: false,
+                    message: error.toString(),
+                    data: null
+                }
+            )
+        }
+    }
 } 
