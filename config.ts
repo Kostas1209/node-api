@@ -1,6 +1,6 @@
 export default {
     port : 3000,
-    host : "http://localhost",
+    host : "0.0.0.0",
 
     db_port : 27017,
     db_host: `mongodb://localhost`,

@@ -1,6 +1,5 @@
-import * as express from 'express';
+const express = require('express');
 import config from '../config';
-//import apiV1 from './apiV1';
 import apiV2 from './features';
 import './db';
 import * as bcrypt from 'bcrypt';
