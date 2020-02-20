@@ -3,6 +3,7 @@ import { SaveUser, FindUserByEmail } from "./auth.repository";
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jwt-then';
 import config from "../../../config";
+import { redisClient } from "../..";
 
 export function RegistrUserService(user: User)
 {
@@ -20,10 +21,11 @@ export async function AuthorizeUser(password: string, email: string) : Promise<{
     let payload: TokenPayload ={
         user_id: user._id
     }
-    let accessToken = await jwt.sign(payload, config.jwt_access_secret,{expiresIn : config.jwt_access_expire});
-    let refreshToken = await jwt.sign(payload, config.jwt_refresh_secret,{expiresIn : config.jwt_refresh_expire} );
+    let accessToken: string = await jwt.sign(payload, config.jwt_access_secret,{expiresIn : config.jwt_access_expire});
+    let refreshToken: string = await jwt.sign(payload, config.jwt_refresh_secret,{expiresIn : config.jwt_refresh_expire} );
 
     /// Save  refresh Token to redis 
-
+    redisClient.setex(`${payload.user_id}`, config.jwt_refresh_expire, refreshToken);
+    
     return Promise.resolve({ isSuccess: true, tokens: {access: accessToken, refresh: refreshToken}} );
 }
