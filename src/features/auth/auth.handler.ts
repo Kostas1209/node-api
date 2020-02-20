@@ -1,6 +1,6 @@
 import { Request, Response, } from 'express';
 import { User, UserCredentials } from '../shared/types/User.types';
-import { RegistrUserService, AuthorizeUser } from './auth.service';
+import { RegistrUserService, AuthorizeUser, LogoutService } from './auth.service';
 
 export async function RegistrUserHandler(req: Request, resp: Response): Promise<any>
 {
@@ -64,4 +64,24 @@ export async function LoginUserHandler(req: Request, resp: Response): Promise<an
             }
         )
     }
+}
+
+export async function LogoutUserHandler(req: Request, resp: Response): Promise<any>
+{
+    let token : string = req.headers.authorization.replace("Bearer ",""); 
+    try{
+        LogoutService(token);
+        return resp.status(200).send({
+            success: true,
+            message: "User was logout"
+        });
+    }
+    catch(error)
+    {
+        return resp.status(500).send({
+            success: false,
+            message: error.toString()
+        });
+    }
+    
 }

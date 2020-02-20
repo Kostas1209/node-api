@@ -29,3 +29,10 @@ export async function AuthorizeUser(password: string, email: string) : Promise<{
     
     return Promise.resolve({ isSuccess: true, tokens: {access: accessToken, refresh: refreshToken}} );
 }
+
+export async function LogoutService(token: string)
+{
+    let payload : TokenPayload  = <TokenPayload > await jwt.verify(token,config.jwt_access_secret);
+
+    redisClient.del(`${payload.user_id}`);
+}
