@@ -12,7 +12,7 @@ const cors = require("cors");
 export const SALT = bcrypt.genSaltSync(config.salt_bcrypt);
 export const redisClient = redis.createClient(config.redis_port, config.redis_host);
 
-redisClient.on("ready",(ready)=>{
+redisClient.on("ready",()=>{
   console.log(`redis conection ready at ${config.redis_host}:${config.redis_port}`);
 })
 const app = express();
