@@ -19,3 +19,12 @@ export interface TokenPayload
 {
     user_id : string
 }
+
+export interface UserForChanging
+{
+    email ?: string,
+    username ?: string,
+    avatar ?: string,
+    firstName ?: string,
+    lastName ?: string 
+}

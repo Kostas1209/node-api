@@ -4,6 +4,7 @@ import config from '../config';
 import apiV2 from './features';
 import './db';
 import * as bcrypt from 'bcrypt';
+import { authAllowAny, logger } from './middleware';
 
 ///  generate salt for crypting pasword 
 export const SALT = bcrypt.genSaltSync(config.salt_bcrypt);
@@ -11,11 +12,8 @@ export const SALT = bcrypt.genSaltSync(config.salt_bcrypt);
 const app = express();
 
 /// middleware for logging requests
-app.use((request , response, next)=>{
-  console.log(request.url +' ' + request.method + ' ');
-  next();
-})
-
+app.use(logger)
+app.use(authAllowAny);
 app.use('/api', apiV2 );
 
 app.listen(config.port, err => {
