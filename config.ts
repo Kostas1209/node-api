@@ -1,8 +1,8 @@
 export default {
-    port : 3000,
+    port : 8000,
     host : "0.0.0.0",
 
-    db_port : 27017,
+    db_port : 27018,
     db_host: `mongodb://mongo`,
     db_name: "node_api_docker",
 

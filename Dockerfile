@@ -9,4 +9,4 @@ RUN npm install
 ADD . /usr/src/app
 # Start
 CMD [ "npm", "start" ]
-EXPOSE 3000
+EXPOSE 8000

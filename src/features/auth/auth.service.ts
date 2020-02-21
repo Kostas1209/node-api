@@ -5,10 +5,18 @@ import * as jwt from 'jwt-then';
 import config from "../../../config";
 import { redisClient } from "../..";
 
-export function RegistrUserService(user: User)
+export async function RegistrUserService(user: User)
 {
     /// validate user info
-    SaveUser(user);
+    try{
+        await SaveUser(user);
+    }
+    catch(error)
+    {
+        console.log(error);
+        throw new Error(error)
+    }
+    
 }
 
 export async function AuthorizeUser(password: string, email: string) : Promise<{isSuccess: boolean, tokens: Object}>

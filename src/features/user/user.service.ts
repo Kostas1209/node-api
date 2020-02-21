@@ -22,5 +22,18 @@ export async function ChangeUserService(token: string, changeInfo: UserForChangi
     {
         throw new Error(error);
     }
+}
 
+export async function GetUserAvatarService(token :string) : Promise<User>
+{
+    let payload : TokenPayload  = <TokenPayload > await jwt.verify(token,config.jwt_access_secret);
+
+    try{
+        let user: User = await GetUserByID(payload.user_id);
+        return user
+    }
+    catch(error)
+    {
+        throw Error(error.toString());
+    }
 }

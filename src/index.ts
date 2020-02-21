@@ -8,7 +8,7 @@ import * as redis from 'redis';
 const cors = require("cors");
 
 ///  generate salt for crypting pasword 
-export const SALT = bcrypt.genSaltSync(config.salt_bcrypt);
+export const SALT : string = bcrypt.genSaltSync(config.salt_bcrypt);
 export const redisClient = redis.createClient(config.redis_port, config.redis_host);
 
 redisClient.on("ready",()=>{
@@ -19,8 +19,8 @@ const app = express();
 /// middleware for logging requests
 app.use(logger)
 app.use(authAllowAny);
+app.use(cors());
 app.use('/api', apiV2 );
-app.use(cors({ credentials: true, origin: true }));
 
 app.listen(config.port, err => {
     if (err) {

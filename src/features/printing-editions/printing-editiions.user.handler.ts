@@ -6,11 +6,20 @@ export async function GetBooksOnPageHandler(req: Request, resp: Response ): Prom
 {
     let PageNumber : number = <number> <unknown>req.params['page'];  
     try{
-        let BooksOnPage = await GetBookOnPageService(PageNumber);
-        console.log("Books " + BooksOnPage );
+        let BooksOnPage : Book[] = await GetBookOnPageService(PageNumber);
+        let responseData = [];
+        BooksOnPage.forEach(element => {
+            responseData.push({
+                id : element._id,
+                author: "Get from author bd",
+                title: element.title,
+                amount_in_storage: element.amountInStorage,
+                price: element.price
+            })
+        }); 
         return resp.status(200).send({
             success: true,
-            data: BooksOnPage
+            data: responseData
         })
     }
     catch(error){

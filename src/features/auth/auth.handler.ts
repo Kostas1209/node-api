@@ -9,16 +9,19 @@ export async function RegistrUserHandler(req: Request, resp: Response): Promise<
     *   and to addition can contain 'avatar', 'firstName', 'lastName'
     */
 
-    let user : User = {
-        email: req.body.email,
-        password: req.body.password,
-        username: req.body.username,
-        avatar: req.body.avatar,
-        firstName: req.body.firstName,
-        lastName: req.body.lastName
-    }
+    
     try{
-        await RegistrUserService(user);
+        console.log(req.body);
+        let user : User = {
+            email: req.body.email,
+            password: req.body.password,
+            username: req.body.username,
+            avatar: req.body.avatar,
+            firstName: req.body.firstName,
+            lastName: req.body.lastName
+        }
+        console.log(user);
+        RegistrUserService(user);
         return resp.status(200).send({
             success: true,
             data: "User was saved successfully"

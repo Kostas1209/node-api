@@ -1,18 +1,20 @@
 import { User } from "../shared/types/User.types";
 import UserModel from "../shared/db-models/User";
+import {hash, hashSync} from 'bcrypt';
 import { SALT } from "../..";
-import * as bcrypt from 'bcrypt';
 
-export function SaveUser(user: User)
+export async function SaveUser(user: User)
 {
-    UserModel.create({
-        password: bcrypt.hashSync(user.password,SALT),
+    let hashedPassword : string = await hash(user.password, SALT);
+    await UserModel.create({
+        password: hashedPassword,
         email: user.email,
         username: user.username,
         avatar: user.avatar,
         firstName: user.firstName,
         lastName: user.lastName
     })
+    return Promise
 }
 
 export async function FindUserByEmail(email: string)

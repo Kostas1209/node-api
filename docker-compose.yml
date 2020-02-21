@@ -6,8 +6,9 @@ services:
   mongo:
     image: "mongo"
     hostname: mongo
+    command: mongod --port 27018
     ports:
-      - 27017:27017
+      - 27018:27018
   web:
     build: .
     command: 'npm start'
@@ -16,7 +17,7 @@ services:
       - ./src:/home/node/app/src
       -  ./nodemon.json:/home/node/app/nodemon.json
     ports:
-      - 3000:3000
+      - 8000:8000
     depends_on:
       - redis
       - mongo

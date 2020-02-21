@@ -3,7 +3,8 @@ import { User, UserForChanging } from '../shared/types/User.types';
 
 export async function GetUserByID(user_id : string) : Promise<User>
 {
-    return UserModel.findById(user_id);
+    let user: User = await UserModel.findById(user_id);
+    return user
 } 
 
 export async function ChangeUserById(user_id: string, changingInfo: UserForChanging)
@@ -11,7 +12,7 @@ export async function ChangeUserById(user_id: string, changingInfo: UserForChang
     let user: User = await UserModel.findById(user_id);
     let data: UserForChanging ={
             email : changingInfo.email ? changingInfo.email : user.email,
-            username : changingInfo.username ? changingInfo.username : user.email,
+            username : changingInfo.username ? changingInfo.username : user.username,
             avatar : changingInfo.avatar ? changingInfo.avatar : user.avatar,
             firstName : changingInfo.firstName ? changingInfo.firstName : user.firstName,
             lastName : changingInfo.lastName ? changingInfo.lastName : user.lastName
@@ -24,4 +25,9 @@ export async function ChangeUserById(user_id: string, changingInfo: UserForChang
             }
         }
     );
+}
+
+export async function GetUserAvatarById(user_id : string) : Promise<User>
+{
+    return UserModel.findById(user_id);
 }
