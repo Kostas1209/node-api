@@ -1,10 +1,12 @@
 FROM node:latest
+
 WORKDIR /usr/src/app
-# Install app dependencies
+# Only copy the package.json file to work directory
 COPY package.json .
+# Install all Packages
 RUN npm install
-# Copy app source code
-COPY . .
-#Expose port and start application
+# Copy all other source code to work directory
+ADD . /usr/src/app
+# Start
+CMD [ "npm", "start" ]
 EXPOSE 3000
-CMD [ "node", "./src/index.ts" ]

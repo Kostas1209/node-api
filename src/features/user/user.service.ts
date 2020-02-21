@@ -1,6 +1,6 @@
 import { User, TokenPayload, UserForChanging } from "../shared/types/User.types";
 import * as jwt from "jwt-then";
-import config from 'C:\\Users\\Anuitex-81\\Desktop\\node\\node-api\\config';
+import config from '../../../config';
 import { GetUserByID, ChangeUserById } from "./user.repository";
 
 export async function GetUser(token: string): Promise<User>

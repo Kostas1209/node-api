@@ -3,8 +3,8 @@ export default {
     host : "0.0.0.0",
 
     db_port : 27017,
-    db_host: `mongodb://localhost`,
-    db_name: "node_api",
+    db_host: `mongodb://mongo`,
+    db_name: "node_api_docker",
 
     salt_bcrypt: 10,
 
@@ -17,6 +17,6 @@ export default {
     facebook_secret: "7454c9a5dda245c2e77e51d15af7202b",
     callback_url: "http://localhost:3000/api/auth/facebook/callback",
 
-    redis_host: "localhost",
+    redis_host: "redis",
     redis_port: 6379
 }
