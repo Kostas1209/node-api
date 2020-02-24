@@ -7,16 +7,13 @@ const UserSchema = Schema(
     {
         password: {
             type: String,
-            required: true
         },
         username: {
             type: String,
-            requered: true,
             unique: 'this username has already existed'
         },
         email: {
             type: String,
-            requered: true,
             unique: 'this email has already existed',
             validate: (value) => {
                 if(!validator.isEmail(value)){

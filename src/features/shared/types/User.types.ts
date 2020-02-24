@@ -28,3 +28,10 @@ export interface UserForChanging
     firstName ?: string,
     lastName ?: string 
 }
+
+export interface LoginWithFacebookCredentials
+{
+    firstName: string,
+    lastName: string,
+    userId : string
+}

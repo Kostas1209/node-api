@@ -1,6 +1,6 @@
 import { Request, Response, } from 'express';
-import { User, UserCredentials } from '../shared/types/User.types';
-import { RegistrUserService, AuthorizeUser, LogoutService, RefreshService } from './auth.service';
+import { User, UserCredentials, LoginWithFacebookCredentials } from '../shared/types/User.types';
+import { RegistrUserService, AuthorizeUser, LogoutService, RefreshService, LoginWithFacebookService } from './auth.service';
 
 export async function RegistrUserHandler(req: Request, resp: Response): Promise<any>
 {
@@ -110,5 +110,30 @@ export async function RefreshTokenHandler(req: Request , resp: Response): Promis
             success: false,
             message: error.toString()
         })
+    }
+}
+
+export async function LoginWithFacebookHandler(req: Request, resp: Response) : Promise<any>
+{
+    /*
+    *   must contain 'userId', 'lastName', 'firstName'
+    */
+
+    let receivedData : LoginWithFacebookCredentials = {
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        userId: req.body.userId
+    }
+
+    try{
+        LoginWithFacebookService(receivedData);
+        return resp.status(200).send({
+            success: true,
+            message: "Successfully create"
+        })
+    }
+    catch(error)
+    {
+
     }
 }

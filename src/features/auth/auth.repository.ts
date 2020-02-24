@@ -1,6 +1,7 @@
-import { User } from "../shared/types/User.types";
+import { User, LoginWithFacebookCredentials } from "../shared/types/User.types";
 import UserModel from "../shared/db-models/User";
-import {hash, hashSync} from 'bcrypt';
+import UserAccountsModel from "../shared/db-models/UserAccounts";
+import {hash} from 'bcrypt';
 import { SALT } from "../..";
 
 export async function SaveUser(user: User)
@@ -25,4 +26,21 @@ export async function FindUserByEmail(email: string)
             throw new Error("Email or password is wrong");
         }
     });
+}
+
+export async function SaveUserWithFacebook(credentials: LoginWithFacebookCredentials): Promise<User>
+{
+    return UserModel.create({
+        username: "facebook:" + credentials.userId,
+        firstName: credentials.firstName,
+        lastName: credentials.lastName,
+    })
+}
+
+export async function SaveUserAccount(nameSocialNetwork: string, user: User)
+{
+    return UserAccountsModel.create({
+        socialNetwork: nameSocialNetwork,
+        userId: user._id
+    })
 }

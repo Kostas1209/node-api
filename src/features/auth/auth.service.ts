@@ -1,5 +1,5 @@
-import { User, TokenPayload } from "../shared/types/User.types";
-import { SaveUser, FindUserByEmail } from "./auth.repository";
+import { User, TokenPayload, LoginWithFacebookCredentials } from "../shared/types/User.types";
+import { SaveUser, FindUserByEmail, SaveUserWithFacebook, SaveUserAccount } from "./auth.repository";
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jwt-then';
 import config from "../../../config";
@@ -54,4 +54,17 @@ export async function RefreshService(refreshToken: string) : Promise<string>
         return jwt.sign(payload, config.jwt_access_secret);
     }
     throw new Error("Not authorized");
+}
+
+export async function LoginWithFacebookService(credentials: LoginWithFacebookCredentials)
+{
+    try{
+        let user: User = await SaveUserWithFacebook(credentials);
+        SaveUserAccount("facebook",user);
+    }
+    catch(error)
+    {
+        throw error
+    }
+    
 }
