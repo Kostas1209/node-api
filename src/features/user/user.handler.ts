@@ -24,7 +24,6 @@ export async function GetUserAvatarHandler(req: Request, resp: Response )
 
     try{
         let user : User = await GetUserAvatarService(token);
-        console.log(user);
         return resp.status(200).send({
             success: true,
             image: user.avatar
@@ -44,7 +43,6 @@ export async function GetUserAvatarHandler(req: Request, resp: Response )
 export async function ChangeUserInfoHandler(req: Request, resp: Response)
 {
     let token : string = req.headers.authorization.replace("Bearer ",""); 
-
     const changeInfo: UserForChanging ={
         email: req.body.email,
         username: req.body.username,

@@ -44,3 +44,14 @@ export async function LogoutService(token: string)
 
     redisClient.del(`${payload.user_id}`);
 }
+
+export async function RefreshService(refreshToken: string) : Promise<string>
+{
+    let payload : TokenPayload = <TokenPayload> await jwt.verify(refreshToken, config.jwt_refresh_secret);
+
+    if(redisClient.exists(`${payload.user_id}`))
+    {
+        return jwt.sign(payload, config.jwt_access_secret);
+    }
+    throw new Error("Not authorized");
+}

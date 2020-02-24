@@ -1,6 +1,6 @@
 import { Request, Response, } from 'express';
 import { User, UserCredentials } from '../shared/types/User.types';
-import { RegistrUserService, AuthorizeUser, LogoutService } from './auth.service';
+import { RegistrUserService, AuthorizeUser, LogoutService, RefreshService } from './auth.service';
 
 export async function RegistrUserHandler(req: Request, resp: Response): Promise<any>
 {
@@ -87,4 +87,28 @@ export async function LogoutUserHandler(req: Request, resp: Response): Promise<a
         });
     }
     
+}
+
+export async function RefreshTokenHandler(req: Request , resp: Response): Promise<any>
+{
+    /*
+    *    request must contains 'refreshToken'
+    */
+    let refreshToken : string = req.body.refreshToken
+    
+    try{
+        let accessToken: string = await RefreshService(refreshToken);
+        
+        return resp.status(200).send({
+            success: true,
+            access: accessToken
+        })
+    }
+    catch(error)
+    {
+        return resp.status(500).send({
+            success: false,
+            message: error.toString()
+        })
+    }
 }
