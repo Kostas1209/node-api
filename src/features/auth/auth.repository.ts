@@ -18,14 +18,15 @@ export async function SaveUser(user: User)
     return Promise
 }
 
-export async function FindUserByEmail(email: string)
+export async function FindUserByEmail(email: string) : Promise<User>
 {
-    return UserModel.findOne({email: email},(error,result)=>{
-        if(error)
-        {
-            throw new Error("Email or password is wrong");
-        }
-    });
+    let user: User = await UserModel.findOne({email: email});
+    return user
+}
+export async function FindUserByUsername(username: string) : Promise<User>
+{
+    let user: User = await UserModel.findOne({username: username});
+    return user
 }
 
 export async function SaveUserWithFacebook(credentials: LoginWithFacebookCredentials): Promise<User>
@@ -39,8 +40,14 @@ export async function SaveUserWithFacebook(credentials: LoginWithFacebookCredent
 
 export async function SaveUserAccount(nameSocialNetwork: string, user: User)
 {
+    console.log(user._id);
     return UserAccountsModel.create({
         socialNetwork: nameSocialNetwork,
         userId: user._id
     })
+}
+
+export async function FindUserAccountById(user_id : string)
+{
+    return 
 }

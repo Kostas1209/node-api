@@ -1,9 +1,10 @@
 import { User, TokenPayload, LoginWithFacebookCredentials } from "../shared/types/User.types";
-import { SaveUser, FindUserByEmail, SaveUserWithFacebook, SaveUserAccount } from "./auth.repository";
+import { SaveUser, FindUserByEmail, SaveUserWithFacebook, SaveUserAccount, FindUserByUsername } from "./auth.repository";
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jwt-then';
 import config from "../../../config";
 import { redisClient } from "../..";
+import { TokensType } from "../shared/types/Tokens";
 
 export async function RegistrUserService(user: User)
 {
@@ -59,8 +60,30 @@ export async function RefreshService(refreshToken: string) : Promise<string>
 export async function LoginWithFacebookService(credentials: LoginWithFacebookCredentials)
 {
     try{
-        let user: User = await SaveUserWithFacebook(credentials);
-        SaveUserAccount("facebook",user);
+        let user: User = await FindUserByUsername("facebook:" + credentials.userId)
+            console.log(user);
+            if(user)
+            { 
+                console.log("test");
+                let payload: TokenPayload = {
+                    user_id: user._id
+                }
+                let accessToken: string = await jwt.sign(payload, config.jwt_access_secret,{expiresIn : config.jwt_access_expire});
+                let refreshToken: string = await jwt.sign(payload, config.jwt_refresh_secret,{expiresIn : config.jwt_refresh_expire} );
+                return { access: accessToken, refresh: refreshToken };
+            } 
+            else{
+                let user:User = await SaveUserWithFacebook(credentials);
+                await SaveUserAccount("facebook",user);
+
+                let payload: TokenPayload = {
+                    user_id: user._id
+                }
+                let accessToken: string = await jwt.sign(payload, config.jwt_access_secret,{expiresIn : config.jwt_access_expire});
+                let refreshToken: string = await jwt.sign(payload, config.jwt_refresh_secret,{expiresIn : config.jwt_refresh_expire} );
+                return { access: accessToken, refresh: refreshToken };
+            }
+
     }
     catch(error)
     {

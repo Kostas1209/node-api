@@ -1,6 +1,7 @@
 import { Request, Response, } from 'express';
 import { User, UserCredentials, LoginWithFacebookCredentials } from '../shared/types/User.types';
 import { RegistrUserService, AuthorizeUser, LogoutService, RefreshService, LoginWithFacebookService } from './auth.service';
+import { TokensType } from '../shared/types/Tokens';
 
 export async function RegistrUserHandler(req: Request, resp: Response): Promise<any>
 {
@@ -126,14 +127,21 @@ export async function LoginWithFacebookHandler(req: Request, resp: Response) : P
     }
 
     try{
-        LoginWithFacebookService(receivedData);
+        let tokens : any = await LoginWithFacebookService(receivedData);
+        console.log(tokens);
         return resp.status(200).send({
             success: true,
+            access: tokens.access,
+            refresh: tokens.refresh,
             message: "Successfully create"
         })
     }
     catch(error)
     {
-
+        console.log(error);
+        return resp.status(500).send({
+            success:false,
+            message: error.toString()
+        })
     }
 }
